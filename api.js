@@ -108,6 +108,39 @@ async function listOrders (req, res, next) {
   res.json(orders)
 }
 
+/**
+ * Edit an order
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+async function editOrder(req, res, next) {
+  const { id } = req.params
+  const change = req.body
+  try {
+    const updatedOrder = await Orders.edit(id, change)
+    res.json(updatedOrder)
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
+ * Delete an order
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ */
+async function deleteOrder(req, res, next) {
+  const { id } = req.params
+  try {
+    await Orders.destroy(id)
+    res.json({ message: 'Order deleted successfully' })
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = autoCatch({
   handleRoot,
   listProducts,
@@ -116,5 +149,7 @@ module.exports = autoCatch({
   editProduct,
   deleteProduct,
   createOrder,
-  listOrders
+  listOrders,
+  editOrder,
+  deleteOrder
 });
